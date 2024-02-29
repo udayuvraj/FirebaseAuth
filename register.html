@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Firebase Auth</title>
+  </head>
+  <body>
+    <h2 class="mb-3">Register User</h2>
+    <form id="MainForm" class="w-25 m-4">
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="emailInp" placeholder="name@example.com">
+            <label for="floatingInput">Email address</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="passwordInp" placeholder="Password">
+            <label for="floatingPassword">Password</label>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="fanameInp" placeholder="Password">
+            <label for="floatingPassword">First Name</label>
+          </div>
+
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="lnameInp" placeholder="Password">
+            <label for="floatingPassword">Last Name</label>
+          </div>
+
+
+          <button type="submit" class="btn btn-primary" style = "float:right;"> Create New User</button>
+        <a href="login.html"> <button type="button" style = "float:right;" class="btn btn-primary me-2 "> Sign In</button> </a>
+
+    </form>
+  
+   
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script type="module">
+     
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
+        import { getDatabase, set, ref } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+       
+        const firebaseConfig = {
+          apiKey: "AIzaSyBhzHLFXKyExd5mxNAWlPPYPCmsWoGPKUA",
+          authDomain: "auth-firebase-8cc57.firebaseapp.com",
+          projectId: "auth-firebase-8cc57",
+          storageBucket: "auth-firebase-8cc57.appspot.com",
+          messagingSenderId: "749024321235",
+          appId: "1:749024321235:web:03542b87d8a99bb0723e26",
+          measurementId: "G-D9V39DTBLW"
+        };
+      
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const auth = getAuth(app);
+        const analytics = getAnalytics(app);
+
+        let EmailInp = document.getElementById ('emailInp');
+        let PassInp = document.getElementById ('passwordInp');
+        let fanmeInp = document.getElementById ('fanmeInp');
+        let lnameInp = document.getElementById ('lnameInp');
+        let MainForm = document.getElementById ('MainForm');
+
+        let RegisterUser = evt => {
+            evt.preventDefault();
+
+            createUserWithEmailAndPassword(auth, EmailInp.value, PassInp.value)
+            .then((credentials)=>{
+                
+                    set(ref(db, 'UsersAuthList/' + credentials.user.uid), 
+                    {
+                        firstname: FanmeInp.value,
+                        lastname: LnameInp.value
+                    })
+                })
+            .catch((error)=>{
+                alert(error.message);
+                console.log(error.code);
+                console.log(error.message);
+
+            })
+
+        }
+
+        MainForm.addEventListener('submit', RegisterUser);
+      </script>
+
+  </body>
+</html>
